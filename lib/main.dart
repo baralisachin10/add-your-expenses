@@ -1,4 +1,4 @@
-import 'package:add_your_expenses/expenses_screen.dart';
+import 'package:add_your_expenses/widgets/expenses_screen.dart';
 import 'package:flutter/material.dart';
 
 void main() {
