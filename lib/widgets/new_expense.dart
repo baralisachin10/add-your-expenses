@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:add_your_expenses/models/expense.dart';
 
 class AddExpense extends StatefulWidget {
-  const AddExpense({super.key});
+  const AddExpense({super.key, required this.onAddExpense});
+
+  final void Function(Expense expense) onAddExpense;
 
   @override
   State<AddExpense> createState() => _AddExpenseState();
@@ -39,10 +41,49 @@ class _AddExpenseState extends State<AddExpense> {
     Navigator.pop(context);
   }
 
+  // function to submit the data
+  void _submitExpenseData() {
+    final enteredAmount = double.tryParse(_amountController.text);
+    final amountIsInvalid = enteredAmount == null || enteredAmount <= 0;
+    if (_titleController.text.trim().isEmpty ||
+        amountIsInvalid ||
+        _selectedDate == null) {
+      // show error message in dialog box
+      showDialog(
+        context: context,
+        builder: (ctx) {
+          return AlertDialog(
+            title: const Text('Invalid input'),
+            content: const Text(
+                'Please enter the valid title, amount, date and category'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(ctx);
+                },
+                child: const Text('Okay'),
+              )
+            ],
+          );
+        },
+      );
+      return;
+    }
+    widget.onAddExpense(
+      Expense(
+        title: _titleController.text,
+        amount: enteredAmount,
+        date: _selectedDate!,
+        category: _selectedCategory,
+      ),
+    );
+    Navigator.pop(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.fromLTRB(16, 48, 16, 16),
       child: Column(
         children: [
           // textfield for title
@@ -116,21 +157,18 @@ class _AddExpenseState extends State<AddExpense> {
                     });
                   }),
               // button to cancel the exepense
+              const Spacer(),
               TextButton(
                 onPressed: _closeModalBottomSheet,
                 child: const Text('cancel'),
               ),
-              const Spacer(),
               // button to save the newExpense
               ElevatedButton(
-                onPressed: () {
-                  print(_titleController.text);
-                  print(_amountController.text);
-                },
+                onPressed: _submitExpenseData,
                 child: const Text('save expense'),
               ),
             ],
-          )
+          ),
         ],
       ),
     );
