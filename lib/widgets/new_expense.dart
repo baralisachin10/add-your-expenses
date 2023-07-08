@@ -82,94 +82,100 @@ class _AddExpenseState extends State<AddExpense> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 48, 16, 16),
-      child: Column(
-        children: [
-          // textfield for title
-          TextField(
-            controller: _titleController,
-            maxLength: 50,
-            decoration: const InputDecoration(
-              label: Text('Title'),
-            ),
-          ),
-          // amount and datepicker
-          Row(
+    final keyboardSpace = MediaQuery.of(context).viewInsets.bottom;
+    return SizedBox(
+      height: double.infinity,
+      child: Padding(
+        padding: EdgeInsets.fromLTRB(16, 48, 16, keyboardSpace + 16),
+        child: SingleChildScrollView(
+          child: Column(
             children: [
-              //  textfield for amount
-              Expanded(
-                child: TextField(
-                  controller: _amountController,
-                  keyboardType: TextInputType.number,
-                  decoration: const InputDecoration(
-                    prefixText: '\$ ',
-                    label: Text('Amount'),
+              // textfield for title
+              TextField(
+                controller: _titleController,
+                maxLength: 50,
+                decoration: const InputDecoration(
+                  label: Text('Title'),
+                ),
+              ),
+              // amount and datepicker
+              Row(
+                children: [
+                  //  textfield for amount
+                  Expanded(
+                    child: TextField(
+                      controller: _amountController,
+                      keyboardType: TextInputType.number,
+                      decoration: const InputDecoration(
+                        prefixText: '\$ ',
+                        label: Text('Amount'),
+                      ),
+                    ),
                   ),
-                ),
-              ),
-              const SizedBox(
-                width: 16,
-              ),
-              // field for date
+                  const SizedBox(
+                    width: 16,
+                  ),
+                  // field for date
 
-              Expanded(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Text(
-                      _selectedDate == null
-                          ? 'No Date selected'
-                          : formatter.format(_selectedDate!),
-                    ),
-                    IconButton(
-                      onPressed: _presentDatePicker,
-                      icon: const Icon(Icons.calendar_month),
-                    ),
-                  ],
-                ),
-              )
-            ],
-          ),
-
-          // save and cancel button
-          Row(
-            children: [
-              // dropdown menu
-              DropdownButton(
-                  value: _selectedCategory,
-                  items: Category.values
-                      .map(
-                        (category) => DropdownMenuItem(
-                          value: category,
-                          child: Text(
-                            category.name.toUpperCase(),
-                          ),
+                  Expanded(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Text(
+                          _selectedDate == null
+                              ? 'No Date selected'
+                              : formatter.format(_selectedDate!),
                         ),
-                      )
-                      .toList(),
-                  onChanged: (value) {
-                    if (value == null) {
-                      return;
-                    }
-                    setState(() {
-                      _selectedCategory = value;
-                    });
-                  }),
-              // button to cancel the exepense
-              const Spacer(),
-              TextButton(
-                onPressed: _closeModalBottomSheet,
-                child: const Text('cancel'),
+                        IconButton(
+                          onPressed: _presentDatePicker,
+                          icon: const Icon(Icons.calendar_month),
+                        ),
+                      ],
+                    ),
+                  )
+                ],
               ),
-              // button to save the newExpense
-              ElevatedButton(
-                onPressed: _submitExpenseData,
-                child: const Text('save expense'),
+
+              // save and cancel button
+              Row(
+                children: [
+                  // dropdown menu
+                  DropdownButton(
+                      value: _selectedCategory,
+                      items: Category.values
+                          .map(
+                            (category) => DropdownMenuItem(
+                              value: category,
+                              child: Text(
+                                category.name.toUpperCase(),
+                              ),
+                            ),
+                          )
+                          .toList(),
+                      onChanged: (value) {
+                        if (value == null) {
+                          return;
+                        }
+                        setState(() {
+                          _selectedCategory = value;
+                        });
+                      }),
+                  // button to cancel the exepense
+                  const Spacer(),
+                  TextButton(
+                    onPressed: _closeModalBottomSheet,
+                    child: const Text('cancel'),
+                  ),
+                  // button to save the newExpense
+                  ElevatedButton(
+                    onPressed: _submitExpenseData,
+                    child: const Text('save expense'),
+                  ),
+                ],
               ),
             ],
           ),
-        ],
+        ),
       ),
     );
   }

@@ -52,43 +52,46 @@ class Chart extends StatelessWidget {
           end: Alignment.topCenter,
         ),
       ),
-      child: Column(
-        children: [
-          Expanded(
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                for (final bucket in buckets) // alternative to map()
-                  ChartBar(
-                    fill: bucket.totalExpenses == 0
-                        ? 0
-                        : bucket.totalExpenses / maxTotalExpense,
-                  )
-              ],
+      child: SizedBox(
+        height: double.infinity,
+        child: Column(
+          children: [
+            Expanded(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  for (final bucket in buckets) // alternative to map()
+                    ChartBar(
+                      fill: bucket.totalExpenses == 0
+                          ? 0
+                          : bucket.totalExpenses / maxTotalExpense,
+                    )
+                ],
+              ),
             ),
-          ),
-          const SizedBox(height: 12),
-          Row(
-            children: buckets
-                .map(
-                  (bucket) => Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 4),
-                      child: Icon(
-                        categoryIcon[bucket.category],
-                        color: isDarkMode
-                            ? Theme.of(context).colorScheme.secondary
-                            : Theme.of(context)
-                                .colorScheme
-                                .primary
-                                .withOpacity(0.7),
+            const SizedBox(height: 12),
+            Row(
+              children: buckets
+                  .map(
+                    (bucket) => Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 4),
+                        child: Icon(
+                          categoryIcon[bucket.category],
+                          color: isDarkMode
+                              ? Theme.of(context).colorScheme.secondary
+                              : Theme.of(context)
+                                  .colorScheme
+                                  .primary
+                                  .withOpacity(0.7),
+                        ),
                       ),
                     ),
-                  ),
-                )
-                .toList(),
-          )
-        ],
+                  )
+                  .toList(),
+            )
+          ],
+        ),
       ),
     );
   }
